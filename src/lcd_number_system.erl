@@ -39,6 +39,7 @@
             $8 => <<"010111111">>,
             $9 => <<"010111011">>
          }).
+-define(NAN, <<"000000000">>).
 
 to_lcd(N) ->
     %% now we have the representations in a format:
@@ -58,7 +59,7 @@ to_lcd([], Acc) -> Acc;
 to_lcd([H | T], Acc) -> to_lcd(T, Acc ++ [number_to_lcd(H)]).
 
 number_to_lcd(Char) ->
-    Def = maps:get(Char, ?LCD),
+    Def = maps:get(Char, ?LCD, ?NAN),
     lcd_to_string(Def).
 
 %% Turn the crazy binary to something more meaningful
