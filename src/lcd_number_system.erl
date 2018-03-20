@@ -38,7 +38,16 @@
          }).
 
 to_lcd(N) ->
-    to_lcd(N, []).
+    %% now we have the representations in a format:
+    %% [[[" "," "," "],[" "," ","|"],[" "," ","|"]],
+    %%  [[" ","_"," "],["|"," ","|"],["|","_","|"]]]
+    %%
+    %%  we need to turn this into rows:
+    Defs = to_lcd(N, []),
+    Row1 = get_row(Defs, 1),
+    Row2 = get_row(Defs, 2),
+    Row3 = get_row(Defs, 3),
+    io:format("~s~n~s~n~s~n", [Row1, Row2, Row3]).
 
 %% Fold through the string
 to_lcd([], Acc) -> Acc;
@@ -57,3 +66,8 @@ pipe(<<"0">>) -> " ";
 pipe(<<"1">>) -> "|".
 underscore(<<"0">>) -> " ";
 underscore(<<"1">>) -> "_".
+
+get_row(Defs, N) ->
+    R = lists:foldl(fun(Def, Acc) -> Acc ++ lists:nth(N, Def) end, [], Defs),
+    lists:flatten(R).
+
